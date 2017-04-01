@@ -85,7 +85,6 @@
             <a href='#' id='forward'><img class='icon' src='images/icons/fast-forward.svg' alt='forward'></a>
         </div>
         <div class='player-icons'>
-            <!--<a href='#' id='reset'-->
             <a href='#' id='showCaptions'>Enable Captions</a>
             <a href='#' id='disableCaptions'>Disable Captions</a>
         </div>
@@ -93,9 +92,6 @@
 </section>
 
 <script>
-  // Remove Controls
-
-
   // Event Listeners For Play/Pause Button
   let video = document.getElementById('video');
 
@@ -104,7 +100,7 @@
 
   let rewind = document.getElementById('rewind');
   let forward = document.getElementById('forward');
-  
+
   let captions = document.getElementById('captions');
 
   // Remove native controls
@@ -166,18 +162,19 @@
   // Stop and reset
   myStop.addEventListener('click', (e) => {
       video.pause();
+      playIcon.src = 'images/icons/play-button.svg';
       video.currentTime = 0;
       video.load();
   });
 
   // Back 10
   rewind.addEventListener('click', (e) => {
-      skip(-10);
+      skip(-30);
   });
 
   // Forward 10
   forward.addEventListener('click', (e) => {
-      skip(10);
+      skip(30);
   });
 
 
