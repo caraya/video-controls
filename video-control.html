@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>Video Control Experiment</title>
+
+    <style>
+
+        .display-wrap {
+            display: flex;
+            flex-flow: row wrap;
+        }
+
+        .control-panel {
+            border: 1px solid black;
+            height: 20em;
+            flex: 1;
+            padding: 1em;
+        }
+
+        .videoPlayer {
+            border: 2px solid red;
+            position: relative;
+            padding-bottom: 56.23%;
+            /* Use 75% for 4:3 videos */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            margin: 5px;
+            flex: 4;
+        }
+
+        .videoPlayer #video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            background: transparent;
+        }
+
+
+        .player-icons {
+            display: flex;
+            flex-flow: row;
+            justify-content: space-between;
+        }
+
+        .icon {
+            border: 0;
+            flex: 1;
+            height: auto;
+            width: 32px;
+        }
+
+    </style>
+</head>
+<body>
+
+<section class='display-wrap'>
+    <div class='videoPlayer'>
+        <video id='video' controls poster='video/hololens.jpg'>
+            <source
+                    src='video/hololens.webm'
+                    type='video/webm'>
+            <source
+                    src='video/hololens.mp4'
+                    type='video/mp4'>
+
+            <track kind='subtitles' src='video/hololens.en.vtt' srclang='en'
+                   label='English' id='english'>
+        </video>
+    </div>
+
+
+    <div class='control-panel'>
+        <h2>Video Control Panel</h2>
+
+        <div class='player-icons'>
+            <a href='#' id='rewind'><img class='icon' src='images/icons/rewind.svg' alt='back'></a>
+            <a href='#' id='play'><img class='icon' id='playIcon' src='images/icons/play-button.svg' alt='play'></a>
+            <a href='#' id='myStop'><img class='icon' src='images/icons/stop.svg' alt='stop'></a>
+            <a href='#' id='forward'><img class='icon' src='images/icons/fast-forward.svg' alt='forward'></a>
+        </div>
+        <div class='player-icons'>
+            <!--<a href='#' id='reset'-->
+            <a href='#' id='showCaptions'>Enable Captions</a>
+            <a href='#' id='disableCaptions'>Disable Captions</a>
+        </div>
+    </div>
+</section>
+
+<script>
+  // Remove Controls
+
+
+  // Event Listeners For Play/Pause Button
+  let video = document.getElementById('video');
+
+  let play = document.getElementById('play');
+  let playIcon = document.getElementById('playIcon');
+
+  let rewind = document.getElementById('rewind');
+  let forward = document.getElementById('forward');
+  
+  let captions = document.getElementById('captions');
+
+  // Remove native controls
+  video.removeAttribute('controls');
+
+  // Event handler for keyboard navigation
+  window.addEventListener('keypress', (e) => {
+          if ((e.keyCode !== 32) || (e.keyCode !== 13)) {
+              if (video.paused) {
+                  video.play();
+                  playIcon.src = 'images/icons/pause.svg';
+              } else {
+                  video.pause();
+                  playIcon.src = 'images/icons/play-button.svg';
+              }
+          }
+      }
+      );
+
+  // play handler
+  play.addEventListener('click', (e) => {
+      // Prevent Default Click Action
+      e.preventDefault();
+      if (video.paused) {
+          video.play();
+          playIcon.src = 'images/icons/pause.svg';
+      } else {
+          video.pause();
+          playIcon.src = 'images/icons/play-button.svg';
+      }
+  });
+
+  //  captions.addEventListener('click', (e) => {
+  //
+  //      e.preventDefault();
+  //      console.log(video.textTracks[0].mode);
+  //      if (video.textTracks[0].mode = 'showing') {
+  //          video.textTracks[0].mode = 'hidden';
+  //          console.log(video.textTracks[0].mode);
+  //      } else {
+  //          video.textTracks[0].mode = 'showing';
+  //          console.log(video.textTracks[0].mode);
+  //      }
+  //
+  //  })
+
+  // Show captions
+  showCaptions.addEventListener('click', (e) => {
+     e.preventDefault();
+     video.textTracks[0].mode = 'showing';
+  });
+
+  // Hide captions
+  disableCaptions.addEventListener('click', (e) => {
+      e.preventDefault();
+      video.textTracks[0].mode = 'hidden';
+  });
+
+  // Stop and reset
+  myStop.addEventListener('click', (e) => {
+      video.pause();
+      video.currentTime = 0;
+      video.load();
+  });
+
+  // Back 10
+  rewind.addEventListener('click', (e) => {
+      skip(-10);
+  });
+
+  // Forward 10
+  forward.addEventListener('click', (e) => {
+      skip(10);
+  });
+
+
+  function skip(value) {
+      video.currentTime += value;
+  }
+
+</script>
+</body>
+</html>
